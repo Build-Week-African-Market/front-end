@@ -1,4 +1,4 @@
-
+import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
 
 function NavBar(props) {
 // RETURNS NAVBAR AT TOP OF SCREEN
@@ -12,6 +12,7 @@ function NavBar(props) {
 
     return (
         <div>
+            {/* BUTTON LINKS TO HOME SCREEN */}
             <button />
             {/* TERNARY CHECKS WHETHER OR NOT SELLER IS LOGGED IN */}
             {/* IF SELLER IS LOGGED IN RENDER DROPDOWN MENU */}

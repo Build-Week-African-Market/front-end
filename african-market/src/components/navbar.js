@@ -11,9 +11,12 @@ function NavBar(props) {
 // let {loginBoolean} = props
 
     return (
-        <div>
+        <Router>
+            <div>
             {/* BUTTON LINKS TO HOME SCREEN */}
-            <button />
+            <Link to="">
+                <button />
+            </Link>
             {/* TERNARY CHECKS WHETHER OR NOT SELLER IS LOGGED IN */}
             {/* IF SELLER IS LOGGED IN RENDER DROPDOWN MENU */}
             {/* IF NOT LOGGED IN RENDER LOGIN IN BUTTONS */}
@@ -23,22 +26,44 @@ function NavBar(props) {
                         USERNAME
                         <select>
                             <option>
-                                Add new Item
+                                <Link to="">
+                                    Add new Item
+                                </Link>
                             </option>
                             <option>
-                                Logout
+                                <Link to="">
+                                    Logout
+                                </Link>
                             </option>
                         </select>
                     </label>
                 </div> :
-                <div>  
-                    <button>
-                        Log-in
-                    </button>
-                    <button>
-                        Sign-up
-                    </button>
+                <div> 
+                    <Link to="">
+                        <button>
+                            Log-in
+                        </button>
+                    </Link>
+                    <Link to="">
+                        <button>
+                            Sign-up
+                        </button>
+                    </Link>
                 </div>} */}
-        </div>
-    )
+            </div>
+
+            <Switch>
+                <Route path="">
+                    <HomeScreen />
+                </Route>
+                <Route path="">
+                    <Login />
+                </Route>
+                <Route path="">
+                    <AddItems />
+                </Route>
+            </Switch>
+        </Router>
+        
+      )
 }

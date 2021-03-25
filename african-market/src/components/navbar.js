@@ -8,22 +8,22 @@ function NavBar(props) {
 // DROPDOWN MENU ALLOWS LOGOUT OR ADD ITEMS
 
 // PROPS TO DETERMINE TO RENDER LOG IN BUTTONS OR DROPDOWN MENU
-// let {loginBoolean} = props
+// let {userName} = props
 
     return (
         <Router>
             <div>
             {/* BUTTON LINKS TO HOME SCREEN */}
-            <Link to="">
-                <button />
-            </Link>
+                <Link to="">
+                    <button />
+                </Link>
             {/* TERNARY CHECKS WHETHER OR NOT SELLER IS LOGGED IN */}
             {/* IF SELLER IS LOGGED IN RENDER DROPDOWN MENU */}
             {/* IF NOT LOGGED IN RENDER LOGIN IN BUTTONS */}
                 {/* {loginBoolean ? 
                 <div>    
                     <label>
-                        USERNAME
+                        {userName}
                         <select>
                             <option>
                                 <Link to="">
@@ -37,6 +37,7 @@ function NavBar(props) {
                             </option>
                         </select>
                     </label>
+                SECOND TERNARY OPTION STARTS BELOW
                 </div> :
                 <div> 
                     <Link to="">
@@ -52,7 +53,7 @@ function NavBar(props) {
                 </div>} */}
             </div>
 
-            <Switch>
+            {/* <Switch>
                 <Route path="">
                     <HomeScreen />
                 </Route>
@@ -62,8 +63,9 @@ function NavBar(props) {
                 <Route path="">
                     <AddItems />
                 </Route>
-            </Switch>
+            </Switch>*/}
         </Router>
-        
-      )
+      );
 }
+
+export default NavBar;

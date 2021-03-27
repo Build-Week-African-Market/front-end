@@ -58,18 +58,6 @@ function NavBar(props) {
                     </Link>
                 </div>} */}
             </div>
-
-            {/* <Switch>
-                <Route path="">
-                    <HomeScreen />
-                </Route>
-                <Route path="">
-                    <Login />
-                </Route>
-                <Route path="">
-                    <AddItems />
-                </Route>
-            </Switch>*/}
         </Router>
       );
 }

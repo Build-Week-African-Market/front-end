@@ -98,9 +98,25 @@ function App() {
 
 
 // AXIOS GET CATEGORIES, ITEMS, AND USER INFO
-// axios.get('')
-//   .then()
-//   .catch();
+// AXIOS GET ALL USERS
+  useEffect(() => {
+    axios.get('https://afr-market-backend.herokuapp.com/users')
+      .then(e => {
+        setAllUsers(e.data);
+        console.log(allUsers);
+  })
+  .catch(console.log('error or defaulting all users get'));
+}, []);
+
+  // AXIOS GET ITEMS
+  useEffect(() => {
+    axios.get('https://afr-market-backend.herokuapp.com/items')
+      .then(e => {
+        // console.log(e);
+        setItems(e.data);
+      })
+      .catch(console.log('error or defaulting get items'));
+  }, [])
 
   return (
     <>

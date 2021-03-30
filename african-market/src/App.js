@@ -12,7 +12,8 @@ import Register from './components/register';
 import Home from './components/home';
 // NAME WILL NEED TO BE CHANGED TO LOGIN
 import Login from './components/login';
-import Browse from './components/categories.js'
+import Browse from './components/categories.js';
+import AddItems from './components/additems';
 
 function App() {
   // INITIAL VARIABLE FOR STATES
@@ -33,7 +34,7 @@ function App() {
   const initialAddItemState = {
     cat_id: '',
     description: '',
-    item_id: newItem.length + 1,
+    item_id: () => newItem.length + 1,
     location: '',
     name: '',
     price: ''
@@ -61,7 +62,7 @@ function App() {
 
   // YUP SCHEMA FOR RETURNINGUSER
 
-  // FUNCTION CALLED IN LOGIN FORM CHANGEHANDLER FUNCTION
+  // FUNCTION CALLED IN REGISTER FORM CHANGEHANDLER FUNCTION
   const yupErrorSetter = e => {
     const {name, value} = e.target;
     Yup.reach(signUpSchema, name)
@@ -154,9 +155,12 @@ function App() {
             allUsers={allUsers}
           />
         </Route>
-        {/* <Route path="">
-          <AddItems />
-        </Route> */}
+        <Route path="/additems">
+          <AddItems 
+            newItem={newItem}
+            setNewItem={setNewItem}
+          />
+        </Route>
       </Switch>
     </Router>
     </>

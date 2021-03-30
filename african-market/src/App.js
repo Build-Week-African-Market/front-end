@@ -30,6 +30,15 @@ function App() {
     password: ''
   }
 
+  const initialAddItemState = {
+    cat_id: '',
+    description: '',
+    item_id: newItem.length + 1,
+    location: '',
+    name: '',
+    price: ''
+  }
+
   // YUP SCHEMA
   // RENAME TO REGISTER SCHEMA
   let signUpSchema = Yup.object().shape({
@@ -84,6 +93,7 @@ function App() {
   // STATE HOLDER FOR RETURNING USER FORM
   let [loginForm, setLoginForm] = useState(initialLoginState);
 
+  let [newItem, setNewItem] = useState(initialAddItemState);
   let [addedItems, setAddedItems] = useState([]);
 
   // USEEFFECT FOR LOGIN BUTTON DISABLING
@@ -102,8 +112,8 @@ function App() {
   useEffect(() => {
     axios.get('https://afr-market-backend.herokuapp.com/users')
       .then(e => {
+        // console.log(e);
         setAllUsers(e.data);
-        console.log(allUsers);
   })
   .catch(console.log('error or defaulting all users get'));
 }, []);
@@ -112,7 +122,7 @@ function App() {
   useEffect(() => {
     axios.get('https://afr-market-backend.herokuapp.com/items')
       .then(e => {
-        // console.log(e);
+        console.log(e);
         setItems(e.data);
       })
       .catch(console.log('error or defaulting get items'));

@@ -14,6 +14,7 @@ import Home from './components/home';
 import Login from './components/login';
 import Browse from './components/categories.js';
 import AddItems from './components/additems';
+import { number } from 'yup/lib/locale';
 
 function App() {
   // INITIAL VARIABLE FOR STATES
@@ -40,18 +41,17 @@ function App() {
     price: ''
   }
 
-  // YUP SCHEMA
-  // RENAME TO REGISTER SCHEMA
-  let signUpSchema = Yup.object().shape({
+  const initialAddItemErrorsState = {...initialAddItemState, item_id: ''}
+
+  // YUP LOGIN SCHEMA
+  let registerSchema = Yup.object().shape({
     userName: Yup
       .string()
-      .required(),
-    email: Yup
-      .string()
-      .email()
+      .trim()
       .required(),
     password: Yup
       .string()
+      .trim()
       .required("Please set a password")
       .min(6, "Your password must be at least 6 characters"),
     terms: Yup
@@ -62,10 +62,38 @@ function App() {
 
   // YUP SCHEMA FOR RETURNINGUSER
 
+  // YUP ADD ITEM SCHEMA
+  let addItemSchema = Yup.object().shape({
+    cat_id: Yup
+      .string()
+      .trim()
+      .lowercase()
+      .required(),
+    description: Yup
+      .string()
+      .required(),
+    item_id: Yup
+      .number()
+      .positive()
+      .required(),
+    location: Yup
+      .string()
+      .trim()
+      .required(),
+    name: Yup
+      .string()
+      .trim()
+      .required(),
+    price: Yup
+      .number()
+      .positive()
+      .required()
+  })
+
   // FUNCTION CALLED IN REGISTER FORM CHANGEHANDLER FUNCTION
   const yupErrorSetter = e => {
     const {name, value} = e.target;
-    Yup.reach(signUpSchema, name)
+    Yup.reach(registerSchema, name)
       .validate(value)
       .then(valid => {
         setErrors({...errors, [name]: ''});
@@ -77,6 +105,21 @@ function App() {
   }
 
   // YUP VALIDATION FOR RETURNING USER
+
+  // YUP VALIDATION FOR ADD ITEM FORM
+
+  const yupAddItemErrorSetter = e => {
+    const {name, value} = e.target;
+    Yup.reach(addItemSchema, name)
+      .validate(value)
+      .then(valid => {
+        setAddItemErrors({...addItemErrors, [name]: ''})
+      })
+      .catch(err => {
+        setAddItemErrors({...addItemErrors, [name]: err.errors[0]});
+        console.log(addItemErrors);
+      })
+  }
 
 // DEFINE STATES
   let [categories, setCategories] = useState([]);
@@ -96,17 +139,17 @@ function App() {
 
   let [newItem, setNewItem] = useState(initialAddItemState);
   let [addedItems, setAddedItems] = useState([]);
+  let [addItemErrors, setAddItemErrors] = useState(initialAddItemErrorsState)
 
   // USEEFFECT FOR LOGIN BUTTON DISABLING
   useEffect(() => {
-    signUpSchema.isValid(registerInfo)
+    registerSchema.isValid(registerInfo)
     // TERNARY DECIDES WHETHER BUTTON IS ENABLED BASED OFF OF SUCCESFUL VALIDATION
       .then(valid => {
         setButtonState(<button disabled={valid ? '' : true}>Click me to Submit!</button>);
         console.log('successful validate');
       });
   }, [registerInfo]);
-
 
 // AXIOS GET CATEGORIES, ITEMS, AND USER INFO
 // AXIOS GET ALL USERS
@@ -159,6 +202,7 @@ function App() {
           <AddItems 
             newItem={newItem}
             setNewItem={setNewItem}
+            errorSetter={yupAddItemErrorSetter}
           />
         </Route>
       </Switch>

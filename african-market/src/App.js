@@ -12,7 +12,9 @@ import Register from './components/register';
 import Home from './components/home';
 // NAME WILL NEED TO BE CHANGED TO LOGIN
 import Login from './components/login';
-import Browse from './components/categories.js'
+import Browse from './components/categories.js';
+import AddItems from './components/additems';
+import { number } from 'yup/lib/locale';
 
 function App() {
   // INITIAL VARIABLE FOR STATES
@@ -30,18 +32,26 @@ function App() {
     password: ''
   }
 
-  // YUP SCHEMA
-  // RENAME TO REGISTER SCHEMA
-  let signUpSchema = Yup.object().shape({
+  const initialAddItemState = {
+    cat_id: '',
+    description: '',
+    item_id: () => newItem.length + 1,
+    location: '',
+    name: '',
+    price: ''
+  }
+
+  const initialAddItemErrorsState = {...initialAddItemState, item_id: ''}
+
+  // YUP LOGIN SCHEMA
+  let registerSchema = Yup.object().shape({
     userName: Yup
       .string()
-      .required(),
-    email: Yup
-      .string()
-      .email()
+      .trim()
       .required(),
     password: Yup
       .string()
+      .trim()
       .required("Please set a password")
       .min(6, "Your password must be at least 6 characters"),
     terms: Yup
@@ -52,10 +62,38 @@ function App() {
 
   // YUP SCHEMA FOR RETURNINGUSER
 
-  // FUNCTION CALLED IN LOGIN FORM CHANGEHANDLER FUNCTION
+  // YUP ADD ITEM SCHEMA
+  let addItemSchema = Yup.object().shape({
+    cat_id: Yup
+      .string()
+      .trim()
+      .lowercase()
+      .required(),
+    description: Yup
+      .string()
+      .required(),
+    item_id: Yup
+      .number()
+      .positive()
+      .required(),
+    location: Yup
+      .string()
+      .trim()
+      .required(),
+    name: Yup
+      .string()
+      .trim()
+      .required(),
+    price: Yup
+      .number()
+      .positive()
+      .required()
+  })
+
+  // FUNCTION CALLED IN REGISTER FORM CHANGEHANDLER FUNCTION
   const yupErrorSetter = e => {
     const {name, value} = e.target;
-    Yup.reach(signUpSchema, name)
+    Yup.reach(registerSchema, name)
       .validate(value)
       .then(valid => {
         setErrors({...errors, [name]: ''});
@@ -67,6 +105,21 @@ function App() {
   }
 
   // YUP VALIDATION FOR RETURNING USER
+
+  // YUP VALIDATION FOR ADD ITEM FORM
+
+  const yupAddItemErrorSetter = e => {
+    const {name, value} = e.target;
+    Yup.reach(addItemSchema, name)
+      .validate(value)
+      .then(valid => {
+        setAddItemErrors({...addItemErrors, [name]: ''})
+      })
+      .catch(err => {
+        setAddItemErrors({...addItemErrors, [name]: err.errors[0]});
+        console.log(addItemErrors);
+      })
+  }
 
 // DEFINE STATES
   let [categories, setCategories] = useState([]);
@@ -84,11 +137,13 @@ function App() {
   // STATE HOLDER FOR RETURNING USER FORM
   let [loginForm, setLoginForm] = useState(initialLoginState);
 
+  let [newItem, setNewItem] = useState(initialAddItemState);
   let [addedItems, setAddedItems] = useState([]);
+  let [addItemErrors, setAddItemErrors] = useState(initialAddItemErrorsState)
 
   // USEEFFECT FOR LOGIN BUTTON DISABLING
   useEffect(() => {
-    signUpSchema.isValid(registerInfo)
+    registerSchema.isValid(registerInfo)
     // TERNARY DECIDES WHETHER BUTTON IS ENABLED BASED OFF OF SUCCESFUL VALIDATION
       .then(valid => {
         setButtonState(<button disabled={valid ? '' : true}>Click me to Submit!</button>);
@@ -96,14 +151,13 @@ function App() {
       });
   }, [registerInfo]);
 
-
 // AXIOS GET CATEGORIES, ITEMS, AND USER INFO
 // AXIOS GET ALL USERS
   useEffect(() => {
     axios.get('https://afr-market-backend.herokuapp.com/users')
       .then(e => {
+        // console.log(e);
         setAllUsers(e.data);
-        console.log(allUsers);
   })
   .catch(console.log('error or defaulting all users get'));
 }, []);
@@ -112,7 +166,7 @@ function App() {
   useEffect(() => {
     axios.get('https://afr-market-backend.herokuapp.com/items')
       .then(e => {
-        // console.log(e);
+        console.log(e);
         setItems(e.data);
       })
       .catch(console.log('error or defaulting get items'));
@@ -144,9 +198,13 @@ function App() {
             allUsers={allUsers}
           />
         </Route>
-        {/* <Route path="">
-          <AddItems />
-        </Route> */}
+        <Route path="/additems">
+          <AddItems 
+            newItem={newItem}
+            setNewItem={setNewItem}
+            errorSetter={yupAddItemErrorSetter}
+          />
+        </Route>
       </Switch>
     </Router>
     </>

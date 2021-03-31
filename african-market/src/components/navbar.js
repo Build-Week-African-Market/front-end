@@ -7,7 +7,9 @@ function NavBar(props) {
     // ABOVE BUTTONS CHANGE TO DROPDOWN WHEN LOGGED IN
     // DROPDOWN MENU ALLOWS LOGOUT OR ADD ITEMS
     
-    // DOES ROUTER BELONG HERE?
+    const dropdownAddItemClick = () => {
+        <Link to="/additems" />
+    }
     
     // PROPS TO DETERMINE TO RENDER LOG IN BUTTONS OR DROPDOWN MENU
     let {userName} = props
@@ -37,10 +39,10 @@ function NavBar(props) {
                         <label>
                             {userName}
                             <select>
-                                <option>
-                                    <Link to="">
+                                <option onClick={dropdownAddItemClick()}>
+                                    {/* <Link to="/additems"> */}
                                         Add new Item
-                                    </Link>
+                                    {/* </Link> */}
                                 </option>
                                 <option>
                                         Logout

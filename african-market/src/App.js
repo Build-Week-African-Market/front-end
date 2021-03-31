@@ -152,25 +152,32 @@ function App() {
   }, [registerInfo]);
 
 // AXIOS GET CATEGORIES, ITEMS, AND USER INFO
-// AXIOS GET ALL USERS
+// AXIOS GET ALL USERS AND ITEMS
   useEffect(() => {
     axios.get('https://afr-market-backend.herokuapp.com/users')
       .then(e => {
         // console.log(e);
         setAllUsers(e.data);
   })
-  .catch(console.log('error or defaulting all users get'));
-}, []);
-
-  // AXIOS GET ITEMS
-  useEffect(() => {
+      .catch(console.log('error or defaulting all users get'));
     axios.get('https://afr-market-backend.herokuapp.com/items')
       .then(e => {
         console.log(e);
         setItems(e.data);
       })
       .catch(console.log('error or defaulting get items'));
-  }, [])
+      // axios.get('https://afr-market-backend.herokuapp.com/items/categories/:category_id')
+      // .then(e => {
+      //   // console.log(e);
+      //   setCategories(e.data);
+  // })
+  //     .catch(console.log('error or defaulting categories'));
+    axios.get('https://afr-market-backend.herokuapp.com/items/owner/:user_id')
+      .then(e => {
+        console.log(e);
+    })
+      .catch(console.log('error or defaulting get items'));
+}, []);
 
   return (
     <>
